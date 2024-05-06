@@ -243,7 +243,7 @@ _CRITICAL void Recep_GetCollision(luos_phy_t *phy_robus, volatile uint8_t *data)
             // Collision detection end
             data_count = 0;
             RobusHAL_SetRxState(false);
-            RobusHAL_ResetTimeout(0);
+            RobusHAL_ResetTimeout(false, 0);
             if (ctx.tx.status == TX_NOK)
             {
                 // Switch to catch Ack.
