@@ -22,7 +22,7 @@ void RobusHAL_SetRxState(uint8_t Enable);
 void RobusHAL_ComTransmit(uint8_t *data, uint16_t size);
 uint8_t RobusHAL_GetTxLockState(void);
 void RobusHAL_SetRxDetecPin(uint8_t Enable);
-void RobusHAL_ResetTimeout(uint16_t enable, uint16_t nbrbit);
+void RobusHAL_ResetTimeout(uint16_t nbrbit);
 void RobusHAL_SetPTPDefaultState(uint8_t PTPNbr);
 void RobusHAL_SetPTPReverseState(uint8_t PTPNbr);
 void RobusHAL_PushPTP(uint8_t PTPNbr);
