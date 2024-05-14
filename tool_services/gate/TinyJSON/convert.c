@@ -45,7 +45,7 @@ __attribute__((weak)) void Convert_CustomJsonToMsg(service_t *service, uint16_t 
  * @param None
  * @return None
  ******************************************************************************/
-__attribute__((weak)) void Convert_CustomMsgToJson(msg_t *msg, char *data)
+__attribute__((weak)) void Convert_CustomMsgToJson(const msg_t *msg, char *data)
 {
     return;
 }
@@ -132,7 +132,7 @@ void Convert_DataToMsg(service_t *service, char *data)
         return;
     }
 
-    json_t const *services = json_getProperty(root, "services");
+    json_t const *services = json_getProperty(root, "s");
     // Get services
     if (services != 0)
     {
@@ -543,12 +543,7 @@ void Convert_JsonToMsg(service_t *service, uint16_t id, luos_type_t type, char *
     {
         if (type != GATE_TYPE)
         {
-            // remove any current updates
-            time = TimeOD_TimeFrom_s(0);
-            TimeOD_TimeToMsg(&time, &msg);
-            msg.header.cmd = UPDATE_PUB;
-            Luos_SendMsg(service, &msg);
-            // configure the new update value
+            // Configure the new update value
             time = TimeOD_TimeFrom_s((float)json_getReal(jobj));
             TimeOD_TimeToMsg(&time, &msg);
             msg.header.cmd = UPDATE_PUB;
@@ -736,8 +731,8 @@ void Convert_JsonToMsg(service_t *service, uint16_t id, luos_type_t type, char *
 // This function start a Json structure and return the string size.
 uint16_t Convert_StartData(char *data)
 {
-    memcpy(data, "{\"services\":{", sizeof("{\"services\":{"));
-    return (sizeof("{\"services\":{") - 1);
+    memcpy(data, "{\"s\":{", sizeof("{\"s\":{"));
+    return (sizeof("{\"s\":{") - 1);
 }
 // This function start a Service into a Json structure and return the string size.
 uint16_t Convert_StartServiceData(char *data, char *alias)
@@ -746,7 +741,7 @@ uint16_t Convert_StartServiceData(char *data, char *alias)
     return (uint16_t)strlen(data);
 }
 // This function create the Json content from a message and return the string size.
-uint16_t Convert_MsgToData(msg_t *msg, char *data)
+uint16_t Convert_MsgToData(const msg_t *msg, char *data)
 {
     float fdata;
     switch (msg->header.cmd)
@@ -1086,12 +1081,6 @@ void Convert_RoutingTableData(service_t *service)
     *(--json_ptr) = '\0';
     // End the Json message
     sprintf(json_ptr, "]}\n");
-    // Run loop before to flush residual msg on the pipe
-    Luos_Loop();
-    // reset all the msg in pipe link
-    PipeLink_Reset(service);
-    // call Luos loop to generap a Luos Task with this msg
-    Luos_Loop();
     // Send the message to pipe
     PipeLink_Send(service, json, strlen(json));
 }
