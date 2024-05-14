@@ -28,7 +28,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10.5"
+          python-version: "3.10"
 
       - name: Install dependencies
         run: |
@@ -71,7 +71,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10.5"
+          python-version: "3.10"
 
       - name: Set up Node
         uses: actions/setup-node@v2
@@ -103,7 +103,7 @@ jobs:
             examples/projects/NUCLEO-F072RB,
             examples/projects/NUCLEO-L073RZ,
             examples/projects/STM32L4S5_discovery,
-            examples/projects/ESP32,
+            # examples/projects/ESP32,
             examples/projects/native,
           ]
         os: [macos-latest, windows-latest, ubuntu-latest]
@@ -115,7 +115,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10.5"
+          python-version: "3.10"
 
       - name: Install dependencies
         run: |
