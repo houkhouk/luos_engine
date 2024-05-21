@@ -305,7 +305,7 @@ _CRITICAL void RobusHAL_ComTransmit(uint8_t *data, uint16_t size)
         // Enable Transmission complete interrupt because we only have one.
         LL_USART_EnableIT_TC(ROBUS_COM);
     }
-    RobusHAL_ResetTimeout(0);
+    RobusHAL_ResetTimeout(DEFAULT_TIMEOUT);
 }
 /******************************************************************************
  * @brief set state of Txlock detection pin
@@ -339,7 +339,7 @@ _CRITICAL uint8_t RobusHAL_GetTxLockState(void)
 #ifdef USART_ISR_BUSY
     if (LL_USART_IsActiveFlag_BUSY(ROBUS_COM) == true)
     {
-        RobusHAL_ResetTimeout(0);
+        RobusHAL_ResetTimeout(DEFAULT_TIMEOUT);
         result = true;
     }
 #else
@@ -353,7 +353,7 @@ _CRITICAL uint8_t RobusHAL_GetTxLockState(void)
         {
             if (result == true)
             {
-                RobusHAL_ResetTimeout(0);
+                RobusHAL_ResetTimeout(DEFAULT_TIMEOUT);
             }
         }
     }
@@ -390,28 +390,23 @@ static void RobusHAL_TimeoutInit(void)
  ******************************************************************************/
 _CRITICAL void RobusHAL_ResetTimeout(uint16_t nbrbit)
 {
-    LL_TIM_DisableCounter(ROBUS_TIMER);
-    NVIC_ClearPendingIRQ(ROBUS_TIMER_IRQ); // Clear IT pending NVIC
-    LL_TIM_ClearFlag_UPDATE(ROBUS_TIMER);
-    LL_TIM_SetCounter(ROBUS_TIMER, 0); // Reset counter
-    if (nbrbit != 0)
-    {
-        LL_TIM_SetAutoReload(ROBUS_TIMER, nbrbit); // reload value
     uint32_t arr_val, diff;
-    arr_val = LL_TIM_ReadReg(ROBUS_TIMER, ARR);         // Get actual timeout value
-    diff = arr_val-LL_TIM_ReadReg(ROBUS_TIMER, CNT);    // Compute remaining time before timeout 
+    arr_val = LL_TIM_ReadReg(ROBUS_TIMER, ARR);  // Get actual timeout value
+    diff = arr_val-LL_TIM_ReadReg(ROBUS_TIMER, CNT);  // Compute remaining time before timeout 
 
-    if( diff < DEFAULT_TIMEOUT ){
+    if(diff < DEFAULT_TIMEOUT){
         LL_TIM_DisableCounter(ROBUS_TIMER);
-        NVIC_ClearPendingIRQ(ROBUS_TIMER_IRQ);
+        NVIC_ClearPendingIRQ(ROBUS_TIMER_IRQ); // Clear IT pending NVIC
         LL_TIM_ClearFlag_UPDATE(ROBUS_TIMER);
 
         LL_TIM_SetAutoReload(ROBUS_TIMER, DEFAULT_TIMEOUT);
         LL_TIM_SetCounter(ROBUS_TIMER, 0);
     }
+    if(nbrbit != 0 && nbrbit != DEFAULT_TIMEOUT){
+        LL_TIM_SetAutoReload(ROBUS_TIMER, nbrbit); // reload value
+        LL_TIM_SetCounter(ROBUS_TIMER, 0); // Reset counter
+    }
     if(nbrbit != 0){
-        LL_TIM_SetAutoReload(ROBUS_TIMER, nbrbit);
-        LL_TIM_SetCounter(ROBUS_TIMER, 0);
         LL_TIM_EnableCounter(ROBUS_TIMER);
     }
 }
@@ -559,7 +554,7 @@ _CRITICAL void PINOUT_IRQHANDLER(uint16_t GPIO_Pin)
     if ((GPIO_Pin == TX_LOCK_DETECT_PIN) && (TX_LOCK_DETECT_IRQ != DISABLE))
     {
         ctx.tx.lock = true;
-        RobusHAL_ResetTimeout(0);
+        RobusHAL_ResetTimeout(DEFAULT_TIMEOUT);
         EXTI->IMR1 &= ~TX_LOCK_DETECT_PIN;
     }
     else
