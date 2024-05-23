@@ -390,6 +390,11 @@ static void RobusHAL_TimeoutInit(void)
  ******************************************************************************/
 _CRITICAL void RobusHAL_ResetTimeout(uint16_t nbrbit)
 {
+    /* TODO: optimize further by getting rid of the need to reach for the ARR value.
+            The same result can be achieved by only setting the start value of the counter and letting it count down toward 0.
+            An IRQ can then be generated when reaching 0. This way diff = counter_value.
+    */
+
     uint32_t arr_val, diff;
     arr_val = LL_TIM_ReadReg(ROBUS_TIMER, ARR);  // Get actual timeout value
     diff = arr_val-LL_TIM_ReadReg(ROBUS_TIMER, CNT);  // Compute remaining time before timeout 
