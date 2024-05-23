@@ -390,13 +390,30 @@ static void RobusHAL_TimeoutInit(void)
  ******************************************************************************/
 _CRITICAL void RobusHAL_ResetTimeout(uint16_t nbrbit)
 {
-    LL_TIM_DisableCounter(ROBUS_TIMER);
-    NVIC_ClearPendingIRQ(ROBUS_TIMER_IRQ); // Clear IT pending NVIC
-    LL_TIM_ClearFlag_UPDATE(ROBUS_TIMER);
-    LL_TIM_SetCounter(ROBUS_TIMER, 0); // Reset counter
-    if (nbrbit != 0)
+    /* TODO: optimize further by getting rid of the need to reach for the ARR value.
+            The same result can be achieved by only setting the start value of the counter and letting it count down toward 0.
+            An IRQ can then be generated when reaching 0. This way diff = counter_value.
+    */
+    uint32_t arr_val, diff;
+    arr_val = LL_TIM_ReadReg(ROBUS_TIMER, ARR);           // Get actual timeout value
+    diff    = arr_val - LL_TIM_ReadReg(ROBUS_TIMER, CNT); // Compute remaining time before timeout
+
+    if (diff < DEFAULT_TIMEOUT)
+    {
+        LL_TIM_DisableCounter(ROBUS_TIMER);
+        NVIC_ClearPendingIRQ(ROBUS_TIMER_IRQ); // Clear IT pending NVIC
+        LL_TIM_ClearFlag_UPDATE(ROBUS_TIMER);
+
+        LL_TIM_SetAutoReload(ROBUS_TIMER, DEFAULT_TIMEOUT);
+        LL_TIM_SetCounter(ROBUS_TIMER, 0);
+    }
+    if (nbrbit != 0 && nbrbit != DEFAULT_TIMEOUT)
     {
         LL_TIM_SetAutoReload(ROBUS_TIMER, nbrbit); // reload value
+        LL_TIM_SetCounter(ROBUS_TIMER, 0);         // Reset counter
+    }
+    if (nbrbit != 0)
+    {
         LL_TIM_EnableCounter(ROBUS_TIMER);
     }
 }
