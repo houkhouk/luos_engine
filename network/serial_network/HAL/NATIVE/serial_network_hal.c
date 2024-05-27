@@ -329,7 +329,7 @@ void SerialHAL_Send(uint8_t *data, uint16_t size)
         LUOS_ASSERT(0);
     }
 #else
-   // Check if the output buffer is full
+    // Check if the output buffer is full
     int bytes_in_buffer;
     ssize_t totalBytesWritten = 0;
     ssize_t bytesWritten;
