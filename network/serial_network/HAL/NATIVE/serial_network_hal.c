@@ -353,7 +353,6 @@ void SerialHAL_Send(uint8_t *data, uint16_t size)
         }
         else
         {
-            usleep(1000);
             totalBytesWritten += bytesWritten;
         }
     }
