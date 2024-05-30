@@ -60,14 +60,6 @@ void Gate_Loop(void)
     {
         LastReceptionDate = Luos_GetSystick();
     }
-    else if ((Luos_GetSystick() - LastReceptionDate > 1000) && (gate_running == RUNNING))
-    {
-        if ((Luos_GetSystick() - LastVoidMsg) > TimeOD_TimeTo_ms(update_time))
-        {
-            LastVoidMsg = Luos_GetSystick();
-            Convert_VoidData(gate);
-        }
-    }
 }
 
 void Gate_msgHandler(service_t *service, const msg_t *msg)
