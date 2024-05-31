@@ -54,7 +54,7 @@ int main(void)
 #endif
     Pipe_Init();
     Gate_Init();
-    // Create a thread to convert messages into Json and steam them using Websocket
+    // Create a thread to convert messages into Json and stream them using Websocket
     pthread_t thread_id;
     pthread_create(&thread_id, NULL, Gate_Pipe_LoopThread, NULL);
     while (1)
