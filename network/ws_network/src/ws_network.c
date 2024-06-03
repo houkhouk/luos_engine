@@ -6,7 +6,7 @@
  ******************************************************************************/
 
 /******************************************************************************
- * # WebSocket Topology management algorythm:
+ * # WebSocket Topology management algorithm:
  *
  * +----+-----+          +------------+--------------+          +--------------+------------+          +--------------+------------+
  * |          |          |     node 1 (master)       |          |          node 2           |          |           node 3          |
@@ -40,9 +40,9 @@
  * ==> Websocket messages
  * --> Function calling
  *
- * This algorythm is used to detect all the nodes on the network.
+ * This algorithm is used to detect all the nodes on the network.
  * All nodes will be detected as star connection.
- * The broker doesn't apear on the Luos_engine architecture, it's just the server allowing to broadcast messages.
+ * The broker doesn't appear on the Luos_engine architecture, it's just the server allowing to broadcast messages.
  *
  ******************************************************************************/
 
@@ -215,7 +215,7 @@ error_return_t Ws_RunTopology(luos_phy_t *phy_ptr, uint8_t *portId)
     static uint8_t port_id = 0;
     if (ping_status == PING_RECEIVED)
     {
-        // We already received a ping on this phy, we need to send an end message indicating that this branche is done
+        // We already received a ping on this phy, we need to send an end message indicating that this branch is done
         uint8_t end = END;
         WsHAL_Send(&end, 1);
         // Consider this branch as done
