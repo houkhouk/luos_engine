@@ -971,7 +971,7 @@ search_result_t *RTFilter_ID(search_result_t *result, uint16_t id)
         if (result->result_table[entry_nbr]->id != id)
         {
             // if we find an other id, erase it from the research table
-            memcpy(&result->result_table[entry_nbr], &result->result_table[entry_nbr + 1], sizeof(routing_table_t *) * (result->result_nbr - entry_nbr));
+            memcpy(&result->result_table[entry_nbr], &result->result_table[entry_nbr + 1], sizeof(routing_table_t *) * (result->result_nbr - entry_nbr - 1));
             result->result_nbr--;
         }
         else
@@ -1006,7 +1006,7 @@ search_result_t *RTFilter_Type(search_result_t *result, luos_type_t type)
         if (result->result_table[entry_nbr]->type != type)
         {
             // if we find an other type, erase it from the research table
-            memcpy(&result->result_table[entry_nbr], &result->result_table[entry_nbr + 1], sizeof(routing_table_t *) * (result->result_nbr - entry_nbr));
+            memcpy(&result->result_table[entry_nbr], &result->result_table[entry_nbr + 1], sizeof(routing_table_t *) * (result->result_nbr - entry_nbr - 1));
             result->result_nbr--;
         }
         else
@@ -1042,7 +1042,7 @@ search_result_t *RTFilter_Node(search_result_t *result, uint16_t node_id)
         if (RoutingTB_NodeIDFromID(result->result_table[entry_nbr]->id) != node_id)
         {
             // if we find an other node_id, erase it from the research table
-            memcpy(&result->result_table[entry_nbr], &result->result_table[entry_nbr + 1], sizeof(routing_table_t *) * (result->result_nbr - entry_nbr));
+            memcpy(&result->result_table[entry_nbr], &result->result_table[entry_nbr + 1], sizeof(routing_table_t *) * (result->result_nbr - entry_nbr - 1));
             result->result_nbr--;
         }
         else
@@ -1078,7 +1078,7 @@ search_result_t *RTFilter_Alias(search_result_t *result, char *alias)
         if (strstr(result->result_table[entry_nbr]->alias, alias) == 0)
         {
             // if we find an other node_id, erase it from the research table
-            memcpy(&result->result_table[entry_nbr], &result->result_table[entry_nbr + 1], sizeof(routing_table_t *) * (result->result_nbr - entry_nbr));
+            memcpy(&result->result_table[entry_nbr], &result->result_table[entry_nbr + 1], sizeof(routing_table_t *) * (result->result_nbr - entry_nbr - 1));
             result->result_nbr--;
         }
         else
@@ -1114,7 +1114,7 @@ search_result_t *RTFilter_Service(search_result_t *result, service_t *service)
         if (result->result_table[entry_nbr]->id != service->id)
         {
             // if we find an other id, erase it from the research table
-            memcpy(&result->result_table[entry_nbr], &result->result_table[entry_nbr + 1], sizeof(routing_table_t *) * (result->result_nbr - entry_nbr));
+            memcpy(&result->result_table[entry_nbr], &result->result_table[entry_nbr + 1], sizeof(routing_table_t *) * (result->result_nbr - entry_nbr - 1));
             result->result_nbr--;
         }
         else
