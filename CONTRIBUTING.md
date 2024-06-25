@@ -39,7 +39,7 @@ Eventually, it allows to meet new people with common interest while talking to o
 
 ## How can I contribute to Luos?
 
-You can contribute to the Luos project by creating **issues** for signaling bugs or requesting features, and opening **pull rquests (PR)** to work on these issues. There are also **simpler ways** of contributing. But first, let us introduce to you the three layers of contribution for the Luos project.
+You can contribute to the Luos project by creating **issues** for signaling bugs or requesting features, and opening **pull requests (PR)** to work on these issues. There are also **simpler ways** of contributing. But first, let us introduce to you the three layers of contribution for the Luos project. 
 
 Before to even begin with the coding contributions, we will talk about the small but important contributions that make the project go on. Then we will describe the two next layers of contribution, from easy to advanced, where it is about creating issues and pull requests, and working on them.
 
