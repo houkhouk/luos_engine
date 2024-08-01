@@ -54,6 +54,7 @@ typedef struct
     servo_motor_mode_t mode;
     angular_position_t target_angular_position;
     angular_speed_t target_angular_speed;
+    torque_t target_torque;
 
     // limits
     angular_position_t limit_angular_position[2];
