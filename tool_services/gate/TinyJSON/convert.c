@@ -784,7 +784,7 @@ uint16_t Convert_MsgToData(const msg_t *msg, char *data)
             break;
         case TORQUE:
             memcpy(&fdata, msg->data, sizeof(float));
-            sprintf(data, "\"moment\":%s,", Convert_Float(fdata));
+            sprintf(data, "\"torque\":%s,", Convert_Float(fdata));
             break;
         case VOLTAGE:
             memcpy(&fdata, msg->data, sizeof(float));
