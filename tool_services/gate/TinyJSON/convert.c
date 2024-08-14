@@ -374,6 +374,42 @@ void Convert_JsonToMsg(service_t *service, uint16_t id, luos_type_t type, char *
             return;
         }
     }
+    // target Torque
+    if ((property && !strcmp(property, "target_torque")))
+    {
+        if ((property_type == JSON_REAL) || (property_type == JSON_INTEGER))
+        {
+            torque_t torque = ForceOD_TorqueFrom_N_m((float)json_getReal(jobj));
+            ForceOD_TorqueToMsg(&torque, &msg);
+            Luos_SendMsg(service, &msg);
+            return;
+        }
+        if (property_type == JSON_ARRAY)
+        {
+            int i = 0;
+            // this is a trajectory
+            int size = (int)json_getInteger(json_getChild(jobj));
+            if (size == 0)
+            {
+                // This trajaectory is empty
+                return;
+            }
+            // find the first \r of the current buf
+            for (i = 0; i < GATE_BUFF_SIZE; i++)
+            {
+                if (bin_data[i] == '\n')
+                {
+                    i++;
+                    break;
+                }
+            }
+            if (i < GATE_BUFF_SIZE - 1)
+            {
+                msg.header.cmd = TORQUE;
+                Luos_SendData(service, &msg, &bin_data[i], (unsigned int)size);
+            }
+        }
+    }
     // target Linear speed
     if ((property && !strcmp(property, "target_trans_speed")) && ((property_type == JSON_REAL) || (property_type == JSON_INTEGER)))
     {
@@ -782,9 +818,9 @@ uint16_t Convert_MsgToData(const msg_t *msg, char *data)
             memcpy(&fdata, msg->data, sizeof(float));
             sprintf(data, "\"force\":%s,", Convert_Float(fdata));
             break;
-        case MOMENT:
+        case TORQUE:
             memcpy(&fdata, msg->data, sizeof(float));
-            sprintf(data, "\"moment\":%s,", Convert_Float(fdata));
+            sprintf(data, "\"torque\":%s,", Convert_Float(fdata));
             break;
         case VOLTAGE:
             memcpy(&fdata, msg->data, sizeof(float));

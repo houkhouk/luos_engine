@@ -152,6 +152,14 @@ void ProfileServo_Handler(service_t *service, const msg_t *msg)
             }
         }
         break;
+        case TORQUE:
+        {
+            // set the motor target torque
+            if (servo_motor_profile->mode.mode_torque)
+            {
+                ForceOD_TorqueFromMsg((torque_t *)&servo_motor_profile->target_torque, msg);
+            }
+        }
         case LINEAR_POSITION:
         {
             // set the motor target linear position
